@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Category } from 'src/modules/categories/entities/category.entity';
 import { CreditCard } from 'src/modules/credit_cards/entities/credit_card.entity';
 
@@ -30,4 +30,10 @@ export class Transaction {
 
   @ManyToOne(() => CreditCard, { nullable: true })
   destinationCard: CreditCard;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { User } from 'src/modules/users/entities/user.entity';
 import { Transaction } from 'src/modules/transactions/entities/transaction.entity';
 
@@ -21,4 +21,10 @@ export class CreditCard {
 
   @OneToMany(() => Transaction, transaction => transaction.card)
   transactions: Transaction[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
