@@ -8,7 +8,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { CreditCardsModule } from './modules/credit_cards/credit_cards.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
-import { EmailService } from './helpers/emails';
+import { EmailService } from './modules/email/email.service';
+import { EmailModule } from './modules/email/email.module';
 
 @Module({
   imports: [
@@ -33,10 +34,11 @@ import { EmailService } from './helpers/emails';
     UsersModule,
     CategoriesModule,
     CreditCardsModule,
-    TransactionsModule
+    TransactionsModule,
+    EmailModule
   ],
   controllers: [AppController],
-  providers: [AppService,EmailService],
+  providers: [AppService],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}

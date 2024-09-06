@@ -1,12 +1,11 @@
-// email.service.ts
-import * as nodemailer from 'nodemailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as nodemailer from 'nodemailer';
 
 
 @Injectable()
 export class EmailService {
-  private transporter;
+    private transporter;
 
   constructor(private configService: ConfigService) {
     // Create a transporter object using the default SMTP transport

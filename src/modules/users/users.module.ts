@@ -4,11 +4,12 @@ import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { CreditCard } from 'src/modules/credit_cards/entities/credit_card.entity';
-import { EmailService } from 'src/helpers/emails';
+import { EmailModule } from '../email/email.module';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, CreditCard])],
+  imports: [TypeOrmModule.forFeature([User, CreditCard]),EmailModule],
   controllers: [UsersController],
-  providers: [UsersService,EmailService],
+  providers: [UsersService],
 })
 export class UsersModule {}

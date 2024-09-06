@@ -5,8 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Utils } from 'src/helpers/utils';
-import { EmailService } from 'src/helpers/emails';
 import { ApiResponse } from 'src/helpers/response';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class UsersService {
