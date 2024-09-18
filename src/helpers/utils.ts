@@ -12,10 +12,10 @@ export class Utils {
   // Function to hash the password
   static async hashPassword(password: string): Promise<string> {
     const saltRounds = 10; // Number of salt rounds for bcrypt
-    try{
-        return await bcrypt.hash(password, saltRounds);
+    try {
+      return await bcrypt.hash(password, saltRounds);
     } catch (error) {
-        console.log(error)
-    } 
+      console.log(error);
+    }
   }
 }
