@@ -2,20 +2,28 @@ import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 
 export class Utils {
-  // Function to generate random password
   static generateRandomPassword(): string {
-    return randomBytes(Math.ceil(5)) // Generates random bytes
-      .toString('hex') // Convert to hexadecimal string
-      .slice(0, 10); // Return the desired length
+    return randomBytes(Math.ceil(5)).toString('hex').slice(0, 10);
   }
 
-  // Function to hash the password
   static async hashPassword(password: string): Promise<string> {
-    const saltRounds = 10; // Number of salt rounds for bcrypt
+    const saltRounds = 10;
     try {
       return await bcrypt.hash(password, saltRounds);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  static async comparePassword(
+    password: string,
+    passwordHash: string,
+  ): Promise<boolean> {
+    try {
+      return await bcrypt.compare(password, passwordHash);
+    } catch (error) {
+      console.log(error);
+      return false;
     }
   }
 }

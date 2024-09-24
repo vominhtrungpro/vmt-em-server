@@ -10,12 +10,14 @@ import { CreditCardsModule } from './modules/credit_cards/credit_cards.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 import { EmailService } from './modules/email/email.service';
 import { EmailModule } from './modules/email/email.module';
+import { FileModule } from './modules/file/file.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({  
+      useFactory: (configService: ConfigService) => ({
         type: 'mysql',
         host: configService.get('DB_HOST'),
         port: +configService.get('DB_PORT'),
@@ -28,14 +30,14 @@ import { EmailModule } from './modules/email/email.module';
       }),
       inject: [ConfigService],
     }),
-    ConfigModule.forRoot(
-      {isGlobal:true}
-    ),
+    ConfigModule.forRoot({ isGlobal: true }),
     UsersModule,
     CategoriesModule,
     CreditCardsModule,
     TransactionsModule,
-    EmailModule
+    EmailModule,
+    FileModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -43,4 +45,3 @@ import { EmailModule } from './modules/email/email.module';
 export class AppModule {
   constructor(private dataSource: DataSource) {}
 }
-

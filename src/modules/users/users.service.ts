@@ -18,14 +18,14 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const isNameExist = await this.checkIfNameExists(createUserDto.name);
-    if (isNameExist) {
-      return ApiResponse.error('Name already exist!', 405);
-    }
-
-    const IsEmailExist = await this.checkIfEmailExists(createUserDto.email);
+    const IsEmailExist = await this.findByEmail(createUserDto.email);
     if (IsEmailExist) {
       return ApiResponse.error('Email already exist!', 406);
+    }
+
+    const isNameExist = await this.findByName(createUserDto.name);
+    if (isNameExist) {
+      return ApiResponse.error('Name already exist!', 405);
     }
 
     const password = Utils.generateRandomPassword();
@@ -52,28 +52,29 @@ export class UsersService {
   async findAll(query: string, current: number, pageSize: number) {
     const { filter, sort } = aqp(query);
     if (filter.current) delete filter.current;
-    if(filter.pageSize) delete filter.pageSize;
+    if (filter.pageSize) delete filter.pageSize;
 
     if (!current) current = 1;
     if (!pageSize) pageSize = 10;
 
-    const totalItems = (await this.usersRepository.find({where: filter})).length;
+    const totalItems = (await this.usersRepository.find({ where: filter }))
+      .length;
     const totalPages = Math.ceil(totalItems / pageSize);
-    const skip = (current - 1) * (pageSize);
+    const skip = (current - 1) * pageSize;
 
     const users = await this.usersRepository.find({
       where: filter,
       take: pageSize,
       skip: skip,
       order: sort,
-      select: ['id', 'name', 'email', 'createdAt', 'updatedAt']
+      select: ['id', 'name', 'email', 'createdAt', 'updatedAt'],
     });
 
     const result = {
       users,
       totalPages,
     };
-    
+
     return ApiResponse.success(result, 'List user success!');
   }
 
@@ -86,6 +87,11 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
+    const isNameExist = await this.findByName(updateUserDto.name);
+    if (isNameExist && isNameExist.id != id) {
+      return ApiResponse.error('Name already exist!', 405);
+    }
+
     const result = await this.usersRepository.update(id, updateUserDto);
     if (!result.affected) {
       return ApiResponse.error('User not found!', 407);
@@ -103,13 +109,13 @@ export class UsersService {
     return ApiResponse.success(null, 'User delete success!');
   }
 
-  async checkIfEmailExists(email: string): Promise<boolean> {
+  async findByEmail(email: string) {
     const user = await this.usersRepository.findOne({ where: { email } });
-    return !!user;
+    return user;
   }
 
-  async checkIfNameExists(name: string): Promise<boolean> {
+  async findByName(name: string) {
     const user = await this.usersRepository.findOne({ where: { name } });
-    return !!user;
+    return user;
   }
 }
